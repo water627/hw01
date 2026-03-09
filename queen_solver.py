@@ -16,7 +16,23 @@ def solve_queen(n):
 
     place_queen(0, [], [], [])  # 从第一行开始放置皇后
     return solutions
+# src/queen_solver.py
+def solve_queen(n):
+    solutions = []  # 存储所有解
+    def place_queen(row, cols, diagonals1, diagonals2):
+        # 故意引入一个错误，改变检查条件
+        if row == n:
+            solutions.append(cols)  # 记录解
+            return
+        for col in range(n):
+            # 错误：把对角线的检查条件改错了
+            if col in cols or (row + col) in diagonals1 or (row - col) in diagonals2:  # 错误修改了位置
+                continue
+            place_queen(row + 1, cols + [col], diagonals1 + [row - col], diagonals2 + [row + col])
 
+    place_queen(0, [], [], [])  # 从第一行开始放置皇后
+    return solutions
+    
 # 测试：输出八皇后问题的解
 if __name__ == "__main__":
     result = solve_queen(8)
