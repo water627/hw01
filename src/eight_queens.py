@@ -13,6 +13,7 @@ def is_valid(positions: list[int], row: int, col: int) -> bool:
     """
     # 检查列冲突 + 对角线冲突
     for r in range(row):
+        # 同列冲突或任一方向对角线冲突则不合法
         if positions[r] == col or abs(r - row) == abs(positions[r] - col):
             return False
     return True
@@ -57,3 +58,4 @@ if __name__ == "__main__":
     results = solve_eight_queens()
     print(f"八皇后问题共有 {len(results)} 种合法方案")
     print(f"前3种方案：{results[:3]}")
+
