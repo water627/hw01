@@ -243,3 +243,82 @@ def is_valid(positions: list[int], row: int, col: int) -> bool:
         if positions[r] == col or abs(r - row) == abs(positions[r] - col):
             return False
     return True
+## 四、修复验证
+### 1. 修复后测试日志
+```plaintext
+qinzhenzhen@jaeamMacBook-Air hw01 % pytest tests/ -v
+============================= test session starts ==============================
+platform darwin -- Python 3.12.8, pytest-9.0.2, pluggy-1.6.0 -- /Library/Frameworks/Python.framework/Versions/3.12/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/qinzhenzhen/Desktop/hw01
+plugins: anyio-4.11.0
+collected 6 items                                                              
+
+tests/test_queen_solver.py::test_is_valid_column_conflict PASSED         [ 16%]
+tests/test_queen_solver.py::test_is_valid_diagonal_conflict FAILED       [ 33%]
+tests/test_queen_solver.py::test_is_valid_valid_case PASSED              [ 50%]
+tests/test_queen_solver.py::test_solve_eight_queens_8_queens FAILED      [ 66%]
+tests/test_queen_solver.py::test_solve_eight_queens_edge_cases FAILED    [ 83%]
+tests/test_queen_solver.py::test_solve_eight_queens_invalid_n PASSED     [100%]
+
+=================================== FAILURES ===================================
+_______________________ test_is_valid_diagonal_conflict ________________________
+
+    def test_is_valid_diagonal_conflict():
+        """测试对角线冲突场景"""
+        positions = [0, -1, -1, -1, -1, -1, -1, -1]
+>       assert is_valid(positions, 1, 1) is False
+E       assert True is False
+E        +  where True = is_valid([0, -1, -1, -1, -1, -1, ...], 1, 1)
+
+tests/test_queen_solver.py:13: AssertionError
+_______________________ test_solve_eight_queens_8_queens _______________________
+
+    def test_solve_eight_queens_8_queens():
+        """验证8皇后解数为92"""
+>       assert len(solve_eight_queens(8)) == 92
+E       assert 2113 == 92
+E        +  where 2113 = len([[0, 1, 2, 3, 4, 5, ...], [0, 1, 2, 3, 4, 6, ...], [0, 1, 2, 3, 4, 7, ...], [0, 1, 2, 3, 5, 6, ...], [0, 1, 2, 3, 5, 7, ...], [0, 1, 2, 3, 6, 4, ...], ...])
+E        +    where [[0, 1, 2, 3, 4, 5, ...], [0, 1, 2, 3, 4, 6, ...], [0, 1, 2, 3, 4, 7, ...], [0, 1, 2, 3, 5, 6, ...], [0, 1, 2, 3, 5, 7, ...], [0, 1, 2, 3, 6, 4, ...], ...] = solve_eight_queens(8)
+
+tests/test_queen_solver.py:22: AssertionError
+______________________ test_solve_eight_queens_edge_cases ______________________
+
+    def test_solve_eight_queens_edge_cases():
+        """测试边界场景：n=1（有解）、n=2（无解）"""
+        assert solve_eight_queens(1) == [[0]]
+>       assert solve_eight_queens(2) == []
+E       AssertionError: assert [[0, 1]] == []
+E         
+E         Left contains one more item: [0, 1]
+E         
+E         Full diff:
+E         - []
+E         + [
+E         +     [...
+E         
+E         ...Full output truncated (4 lines hidden), use '-vv' to show
+
+tests/test_queen_solver.py:27: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_queen_solver.py::test_is_valid_diagonal_conflict - assert True is False
+FAILED tests/test_queen_solver.py::test_solve_eight_queens_8_queens - assert 2113 == 92
+FAILED tests/test_queen_solver.py::test_solve_eight_queens_edge_cases - AssertionError: assert [[0, 1]] == []
+========================= 3 failed, 3 passed in 0.06s ==========================
+qinzhenzhen@jaeamMacBook-Air hw01 % pytest tests/ -v
+============================= test session starts ==============================
+### 3. 粘贴测试日志
+platform darwin -- Python 3.12.8, pytest-9.0.2, pluggy-1.6.0 -- /Library/Frameworks/Python.framework/Versions/3.12/bin/python3.12
+cachedir: .pytest_cache
+rootdir: /Users/qinzhenzhen/Desktop/hw01
+plugins: anyio-4.11.0
+collected 6 items                                                              
+
+tests/test_queen_solver.py::test_is_valid_column_conflict PASSED         [ 16%]
+tests/test_queen_solver.py::test_is_valid_diagonal_conflict PASSED       [ 33%]
+tests/test_queen_solver.py::test_is_valid_valid_case PASSED              [ 50%]
+tests/test_queen_solver.py::test_solve_eight_queens_8_queens PASSED      [ 66%]
+tests/test_queen_solver.py::test_solve_eight_queens_edge_cases PASSED    [ 83%]
+tests/test_queen_solver.py::test_solve_eight_queens_invalid_n PASSED     [100%]
+
+============================== 6 passed in 0.01s ===============================
